@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title">Posted by {{ post.user }} on {{ post.created_at }}</h1>
+        <p class="card-text">{{ post.text|linebreaks }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="btn-group">
+        <a href="{% url 'feed:post_list' %}" class="btn btn-primary mx-1">Back to Post List</a>
+        {% if previous %}
+          <a href="{{ previous.get_absolute_url }}" class="btn btn-primary mx-1">Previous</a>
+        {% endif %}
+        {% if next %}
+          <a href="{{ next.get_absolute_url }}" class="btn btn-primary mx-1">Next</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

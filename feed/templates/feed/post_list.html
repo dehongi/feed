@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="mb-3">Post List</h1>
+    <a href="{% url 'feed:post_create' %}" class="btn btn-primary mb-3">Create Post</a>
+    <ul class="list-group">
+      {% for post in posts %}
+        <li class="list-group-item">
+          <p class="text-muted">By {{ post.user }} on {{ post.created_at }}</p>
+          <p>{{ post.text|linebreaks }}</p>
+          <a href="{% url 'feed:post_detail' post.id %}" class="btn btn-secondary btn-sm">View Post</a>
+        </li>
+      {% empty %}
+        <li class="list-group-item">No posts available.</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

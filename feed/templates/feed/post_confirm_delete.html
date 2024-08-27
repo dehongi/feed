@@ -1,0 +1,19 @@
+<!-- post_confirm_delete.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Delete Post
+{% endblock %}
+
+{% block content %}
+  <div class="container mb-3" style="padding-top: 150px;">
+    <h1>Delete Post</h1>
+    <p>Are you sure you want to delete the post "{{ object.title }}"?</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, delete</button>
+      <a href="{% url 'feed:post_detail' post.id %}" class="btn btn-secondary">No, cancel</a>
+    </form>
+  </div>
+{% endblock %}

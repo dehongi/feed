@@ -4,7 +4,13 @@
   <div class="container mt-5">
     <div class="card">
       <div class="card-body">
-        <h1 class="card-title">Posted by {{ post.user }} on {{ post.created_at }}</h1>
+        <h1 class="card-title">
+          Posted by {{ post.user }} on {{ post.created_at }}
+          {% if request.user == post.user %}
+            <a href="{% url 'feed:post_edit' post.id %}" class="btn btn-secondary mx-1">Edit</a>
+            <a href="{% url 'feed:post_delete' post.id %}" class="btn btn-danger mx-1">Delete</a>
+          {% endif %}
+        </h1>
         <p class="card-text">{{ post.text|linebreaks }}</p>
       </div>
     </div>

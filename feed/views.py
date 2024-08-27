@@ -1,6 +1,4 @@
-from django.forms import BaseModelForm
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic import (
     CreateView,
     ListView,
@@ -20,11 +18,15 @@ from .forms import PostForm
 class PostListView(ListView):
     model = Post
     context_object_name = "posts"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.order_by("-created_at")
 
 
 class PostDetailView(DetailView):
     model = Post
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["previous"] = self.get_previous_object()
@@ -56,9 +58,19 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
+    form_class = PostForm
+
+    def test_func(self) -> bool | None:
+        return self.request.user == self.get_object().user
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
+
+    def get_success_url(self) -> str:
+        return reverse("feed:post_list")
+
+    def test_func(self) -> bool | None:
+        return self.request.user == self.get_object().user
